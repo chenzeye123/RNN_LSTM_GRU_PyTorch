@@ -6,6 +6,7 @@ import torch.optim as optim
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
+#matplotlib.use('Agg') 这行代码的作用，就是明确告诉 Matplotlib：“不要尝试在屏幕上显示任何图表，直接把它们保存成文件
 import matplotlib.pyplot as plt
 
 def generate_sine_wave():
@@ -34,11 +35,12 @@ if __name__ == '__main__':
     torch.manual_seed(0)
     # load data and make training set
     data = generate_sine_wave()
+    # 0到第3行是测试集，3到最后是训练集，拿前999个数，预测后999个数。
     input = torch.from_numpy(data[3:, :-1])
     target = torch.from_numpy(data[3:, 1:])
     test_input = torch.from_numpy(data[:3, :-1])
     test_target = torch.from_numpy(data[:3, 1:])
-
+    # ！！！
     # build the model
     if args.arch == "gru":
         from models import GRUNet as Net

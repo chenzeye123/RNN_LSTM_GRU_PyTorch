@@ -1,6 +1,7 @@
 *.pth
 *.pt
 *.log
+.vscode/
 
 /results/
 **/__pycache__/
