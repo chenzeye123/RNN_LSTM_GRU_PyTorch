@@ -40,7 +40,7 @@ if __name__ == '__main__':
     target = torch.from_numpy(data[3:, 1:])
     test_input = torch.from_numpy(data[:3, :-1])
     test_target = torch.from_numpy(data[:3, 1:])
-    # ！！！
+    
     # build the model
     if args.arch == "gru":
         from models import GRUNet as Net
@@ -59,11 +59,17 @@ if __name__ == '__main__':
     optimizer = optim.LBFGS(seq.parameters(), lr=0.8)
 
     #begin to train
+    
     for i in range(args.epochs):
         print('STEP: ', i)
+        '''
+        LBFGS 的 closure 可能被调用多次，是因为它内部需要用线搜索来找到最优步长。
+        每尝试一个新步长，都要重新做一次前向传播和反向传播来计算损失和梯度。
+        这是 LBFGS 比 Adam 更"精确"但也更"慢"的原因
+        '''
         def closure():
             optimizer.zero_grad()
-            out = seq(input)
+            out = seq(input) # 调用_call_函数，里面包含调用forward函数.但显式调用会绕过PyTorch 的钩子系统、分布式同步、梯度检查等核心功能
             loss = criterion(out, target)
             print('loss:', loss.item())
             loss.backward()

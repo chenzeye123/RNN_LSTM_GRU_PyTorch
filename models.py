@@ -37,7 +37,7 @@ class GRUNet(nn.Module):
         outputs = torch.cat(outputs, dim=1)
         return outputs
 
-
+# 输入特征1，隐藏层维度51，输出特征1
 class LSTMNet(nn.Module):
     def __init__(self, args, input_size=1, hidden_dim=51):
         super(LSTMNet, self).__init__()
@@ -69,7 +69,7 @@ class LSTMNet(nn.Module):
             h_t2, c_t2 = self.lstm2(h_t, (h_t2, c_t2))
             output = self.linear(h_t2)
             outputs += [output]
-        outputs = torch.cat(outputs, dim=1)
+        outputs = torch.cat(outputs, dim=1)# cat函数将列表中的张量沿指定维度拼接起来，dim=1表示在列方向上拼接
         return outputs
 
 class RNNNet(nn.Module):

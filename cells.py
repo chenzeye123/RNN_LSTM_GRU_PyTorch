@@ -39,6 +39,8 @@ class LSTMCell(nn.Module):
         super(LSTMCell, self).__init__()
         self.input_size = input_size
         self.hidden_dim = hidden_dim
+        # t_layer 负责看当下（提取新信息的特征）
+        # pre_t_layer 负责忆往昔（结合历史背景的特征）
         self.t_layer = nn.Linear(input_size, 4*hidden_dim)
         self.pre_t_layer = nn.Linear(hidden_dim, 4*hidden_dim)
     
@@ -51,10 +53,12 @@ class LSTMCell(nn.Module):
         #       out_hidden: of shape (batch_size, hidden_size)
 
         if pre_t is None:
+            # to(t_in.device) 的作用就是把 pre_t 这个张量移动到和输入数据 t_in 完全相同的设备
+            # 在深度学习训练中，所有参与运算的张量必须在同一个设备上，否则会报错
             pre_t = torch.zeros((t_in.shape(0), self.hidden_dim)).to(t_in.device)
             pre_t = (pre_t, pre_t)
         cell_state, cell_hidden = pre_t
-
+        # cell_state负责长期记忆，cell_hidden负责短期输出
         t_in = self.t_layer(t_in)
         cell_hidden = self.pre_t_layer(cell_hidden)
 
