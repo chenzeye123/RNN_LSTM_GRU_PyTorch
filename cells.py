@@ -66,7 +66,7 @@ class LSTMCell(nn.Module):
         forget_ch, input_ch, update_ch, out_ch = cell_hidden.chunk(4, dim=1)
 
         forget_gate = torch.sigmoid(forget_t+forget_ch)
-        cell_state = cell_state * forget_gate
+        cell_state = cell_state * forget_gate # “*”是逐元素相乘，@ 或 torch.matmul()是矩阵乘法
 
         input_gate = torch.sigmoid(input_t + input_ch)
         out_state = cell_state + input_gate * torch.tanh(update_t+update_ch)

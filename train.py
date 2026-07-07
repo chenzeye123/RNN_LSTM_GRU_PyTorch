@@ -71,7 +71,7 @@ if __name__ == '__main__':
             optimizer.zero_grad()
             out = seq(input) # 调用_call_函数，里面包含调用forward函数.但显式调用会绕过PyTorch 的钩子系统、分布式同步、梯度检查等核心功能
             loss = criterion(out, target)
-            print('loss:', loss.item())
+            print('loss:', loss.item())# item()将只包含一个元素（标量）的 Tensor 转换为 Python 的普通数值。
             loss.backward()
             return loss
         optimizer.step(closure)
